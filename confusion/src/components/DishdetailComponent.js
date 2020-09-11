@@ -80,5 +80,3 @@ import { Card, CardImg , CardText, CardBody, CardTitle} from 'reactstrap';
 
 
 export default DishDetail;
-//  <RenderComments comments = {dish.comments}/>
-/**/
