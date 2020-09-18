@@ -1,6 +1,7 @@
 import React  from 'react'; 
 import { Card, CardImg , CardText, CardBody, CardTitle , Breadcrumb ,BreadcrumbItem} from 'reactstrap';
 import { Link } from 'react-router-dom';
+import  SubmitComment  from './CommentForm';
 
     function RenderDish({dish})
     {
@@ -26,7 +27,7 @@ import { Link } from 'react-router-dom';
 
         }
 
-        function RenderComments({comment})
+        function RenderComments({comment,addComment,dishId})
         {
             
             const cmt=comment.map((comment)=>{
@@ -40,6 +41,7 @@ import { Link } from 'react-router-dom';
                                     <div className="row">
                                         <p>--{comment.author} {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</p>
                                     </div>
+                                    
                                     
                         </div>           
                 );
@@ -56,8 +58,13 @@ import { Link } from 'react-router-dom';
                         {cmt}    
                 
                     </CardText>
+                    <SubmitComment dishId={dishId} addComment={addComment}/>
+
                 </CardBody>
                 </Card>
+                
+                    
+                
                 </div>
             
             );
@@ -96,7 +103,9 @@ import { Link } from 'react-router-dom';
                     <RenderDish dish={props.dish}/>
                     </div>
                     <div class="col-12 col-md-5 m-1">
-                    <RenderComments comment = {props.comment}/>
+                    <RenderComments comment = {props.comment}
+                                    addComment = {props.addComment}
+                                    dishId = {props.dish.id}/>
                     </div>
                     </div>
                     </div>
