@@ -6,7 +6,7 @@ import DishDetail from './DishdetailComponent';
 import Contact from './ContactComponent';
 import About from './AboutUsComponent'
 import Footer from './FooterComponent';
-import {addComment} from '../redux/ActionCreator';
+import {addComment, fetchDishes} from '../redux/ActionCreator';
 
 import {Route , Switch , Redirect , withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -23,11 +23,12 @@ const mapStateToProps = state => { //state is a paramater whic represents redux 
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  addComment : (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+  addComment : (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
   //dispatch takes actioncreator as parameter and that needs the four paramters ,
   //basically a function call to the addComment actionCreator
-  //function returns action object which is given to the dispatcher that is supplied as a function to addComment
-  //see export and how this is made use of in the rendering ,DishDetail part and alter dishDetailComp accordingly
+  //function returns action object which is given to dispatcher that is supplied as a function to addComment
+  //see export & how this is made use of in the rendering ,DishDetail part and alter dishDetailComp accordingly
+  fetchDishes : () => {dispatch(fetchDishes())}
 });
 
 class Main extends Component {
@@ -37,22 +38,28 @@ class Main extends Component {
    
   }
 
- 
+  componentDidMount(){ //good time to fetch data when the component mounts , call fetch dishes here
+      this.props.fetchDishes();
+  }
 
   
 
   render() {
     const DishWithId = ({match}) =>{
       return(      
-        <DishDetail  dish = {this.props.dishes.filter((dish) => dish.id ===  parseInt(match.params.dishId,10))[0] } 
+        <DishDetail dish = {this.props.dishes.dishes.filter((dish) => dish.id ===  parseInt(match.params.dishId,10))[0] } 
+                    isLoading = {this.props.dishes.isLoading}
+                    ErrMess = {this.props.dishes.errMess}
                     comment = {this.props.comments.filter((comment) => comment.dishId === (parseInt(match.params.dishId,10))) }
                     addComment = {this.props.addComment}
                     />
       );
     }
     const HomePage = () => {
-      return(
-        <Home dish={this.props.dishes.filter((dish) => dish.featured)[0]}
+      return( //dishes.dishes because we have changed the state's structure in the dishes reducer
+        <Home dish={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
+              dishesLoading = {this.props.dishes.isLoading}
+              dishesErrMess = {this.props.dishes.errMess}
               leader={this.props.leaders.filter((leader) => leader.featured)[0]}
               promotion={this.props.promotions.filter((promotion) => promotion.featured)[0]}
         />
