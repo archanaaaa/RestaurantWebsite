@@ -41,6 +41,7 @@ import {baseUrl} from '../shared/baseUrl';
             return(
                 <div className="container">
                     <div className="row">
+                        <p>Failed to fetch</p>
                         <h4>{props.dishes.errMess}</h4>
                     </div>
                 </div>

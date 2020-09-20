@@ -1,32 +1,44 @@
-import { render } from '@testing-library/react';
 import React from 'react';
 import {Card ,CardImg , CardBody ,CardText ,CardTitle,CardSubtitle } from 'reactstrap';
 import {Loading} from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl'
 
-function RenderCard({item, isLoading , errMess})
+import {FadeTransform} from 'react-animation-components';
+
+function RenderCard({item, isLoading , errMess,str})
 {
     if(isLoading){
         return (
             <Loading/>
+            
         );
     }
 
     else if(errMess){
         return(
-        <h4>{errMess}</h4>
+        <div>
+            <h4>{errMess}</h4>
+            <p>{str}</p>
+        </div>
+       
         );
     }
-    else{
+    else {
         return(
+            <FadeTransform
+                in
+                transformProps={{
+                    exitTransform: 'scale(0.5) translateY(-50%)'
+                }}>
             <Card>
-                <CardImg src={baseUrl + item.image} alt={item.name} />
+                <CardImg src={baseUrl +item.image} alt={item.name} />
                 <CardBody>
                 <CardTitle>{item.name}</CardTitle>
                 {item.designation ? <CardSubtitle>{item.designation}</CardSubtitle> : null }
                 <CardText>{item.description}</CardText>
                 </CardBody>
             </Card>
+            </FadeTransform>
     
         );
     }
@@ -38,19 +50,24 @@ function Home(props)
     
         return(
             <div className="container">
-                <div class="row align-items-start">
-                    <div class="col-12 col-md m-1">
+                <div className="row align-items-start">
+                    <div className="col-12 col-md m-1">
                         <RenderCard item={props.dish} 
                                     isLoading={props.dishesLoading} 
-                                    errMess={props.dishesErrMess} />
+                                    errMess={props.dishesErrMess} 
+                                    str = 'dish'/>
                     </div>
-                    <div class="col-12 col-md m-1">
+                    <div className="col-12 col-md m-1">
                         <RenderCard item={props.promotion}
                                     isLoading={props.promoLoading} 
-                                    errMess={props.promoErrMess}/>
+                                    errMess={props.promoErrMess}
+                                    str = 'promo'/>
                     </div>
-                    <div class="col-12 col-md m-1">
-                        <RenderCard item={props.leader}/>
+                    <div className="col-12 col-md m-1">
+                        <RenderCard item={props.leader}
+                                    isLoading={props.leadersLoading} 
+                                    errMess={props.leadersErrMess}
+                                    str = 'leader'/>
                     </div>
                 </div>
             </div>

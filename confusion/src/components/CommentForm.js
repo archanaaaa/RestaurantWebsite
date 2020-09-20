@@ -32,7 +32,7 @@ class SubmitComment extends Component {
 
     handleSubmit(values){  //bind this in the constructor so it is available for use
         this.toggleModal();
-        this.props.addComment(this.props.dishId, values.rating, values.name, values.message)
+        this.props.postComment(this.props.dishId, values.rating, values.name, values.message)
         //console.log("Current state is : "+JSON.stringify(values));
         //alert("Current state is : "+JSON.stringify(values));
         //event.preventDefault(); //to prevent going to the next page after submitting which is usually the default action 

@@ -26,8 +26,9 @@ class Contact extends Component {
 
     handleSubmit(values){  //bind this in the constructor so it is available for use
         
-        console.log("Current state is : "+JSON.stringify(values));
-        alert("Current state is : "+JSON.stringify(values));
+        //console.log("Current state is : "+JSON.stringify(values));
+        //alert("Current state is : "+JSON.stringify(values));
+        this.props.postFeedback(values.firstname, values.lastname, values.telnum, values.email, values.agree, values.contactType, values.message);
         //event.preventDefault(); //to prevent going to the next page after submitting which is usually the default action 
         this.props.resetFeedbackForm();
     }

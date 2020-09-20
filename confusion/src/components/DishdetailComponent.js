@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import  SubmitComment  from './CommentForm';
 import { Loading } from './LoadingComponent';
 import {baseUrl} from '../shared/baseUrl';
+import { FadeTransform , Fade , Stagger } from 'react-animation-components';
 
     function RenderDish({dish})
     {
@@ -12,7 +13,11 @@ import {baseUrl} from '../shared/baseUrl';
                     
                     <div>   
                         
-                            
+                        <FadeTransform
+                                in
+                                transformProps={{
+                                    exitTransform: 'scale(0.5) translateY(-50%)'
+                                }}>
                                 <Card>
                                     <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
                                     <CardBody>
@@ -20,6 +25,7 @@ import {baseUrl} from '../shared/baseUrl';
                                             <CardText>{dish.description}</CardText>
                                     </CardBody> 
                                 </Card>
+                            </FadeTransform>
                                                                 
                         
                     </div>
@@ -29,25 +35,8 @@ import {baseUrl} from '../shared/baseUrl';
 
         }
 
-        function RenderComments({comment,addComment,dishId})
+        function RenderComments({comment,postComment,dishId})
         {
-            
-            const cmt=comment.map((comment)=>{
-                return(
-                    
-                        <div className="container">
-                            
-                                    <div className="row">
-                                        <p>{comment.comment}</p>
-                                    </div>
-                                    <div className="row">
-                                        <p>--{comment.author} {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</p>
-                                    </div>
-                                    
-                                    
-                        </div>           
-                );
-            });
            
             return(
             <div className="container">
@@ -57,10 +46,23 @@ import {baseUrl} from '../shared/baseUrl';
                     <CardTitle><h4>Comments</h4></CardTitle>
                     <CardText>
 
-                        {cmt}    
+                        <ul>
+                        <Stagger in>
+                            {comment.map((comment)=>{
+                                return(
+                                    <Fade in>
+                                    <li key={comment.id}>
+                                        <p>{comment.comment}</p>
+                                        <p>--{comment.author},{new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</p>
+                                    </li>
+                                    </Fade>
+                                );
+                            })}
+                        </Stagger>
+                        </ul>    
                 
                     </CardText>
-                    <SubmitComment dishId={dishId} addComment={addComment}/>
+                    <SubmitComment dishId={dishId} postComment={postComment}/>
 
                 </CardBody>
                 </Card>
@@ -100,7 +102,7 @@ import {baseUrl} from '../shared/baseUrl';
             );
         }
 
-        else if(props.dish != null){ 
+        else if(props.dish!=null){ 
             return(
                 <div className="container">
                         <div className="row">
@@ -126,8 +128,8 @@ import {baseUrl} from '../shared/baseUrl';
                     <RenderDish dish={props.dish}/>
                     </div>
                     <div class="col-12 col-md-5 m-1">
-                    <RenderComments comment = {props.comment}
-                                    addComment = {props.addComment}
+                    <RenderComments comment = {props.comments}
+                                    postComment = {props.postComment}
                                     dishId = {props.dish.id}
                                     
                                     />
